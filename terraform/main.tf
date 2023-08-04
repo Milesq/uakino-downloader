@@ -16,3 +16,8 @@ provider "aws" {
 module "downloader" {
   source = "./downloader"
 }
+
+module "invoker" {
+  source      = "./invoker"
+  cluster_arn = module.downloader.ecs_cluster_arn
+}
