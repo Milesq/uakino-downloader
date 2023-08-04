@@ -1,10 +1,6 @@
 resource "aws_iam_role" "lambda_role" {
   name = "uakino-lambda-role"
 
-  inline_policy {
-    policy = data.aws_iam_policy_document.allow_ecs_run_task.json
-  }
-
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -25,4 +21,9 @@ data "aws_iam_policy_document" "allow_ecs_run_task" {
     effect    = "Allow"
     resources = [var.cluster_arn]
   }
+}
+
+resource "aws_iam_role_policy" "allow_ecs_run_task" {
+  role   = aws_iam_role.lambda_role.name
+  policy = data.aws_iam_policy_document.allow_ecs_run_task.json
 }
