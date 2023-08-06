@@ -13,21 +13,19 @@ resource "aws_cognito_user_pool" "pool" {
     allow_admin_create_user_only = true
   }
 
-  schema {
-    attribute_data_type      = "String"
-    developer_only_attribute = false
-    mutable                  = true
-    name                     = "nickname"
-    required                 = true
-    string_attribute_constraints {
-      max_length = "2048"
-      min_length = "0"
-    }
+  password_policy {
+    minimum_length    = 8
+    require_lowercase = false
+    require_numbers   = false
+    require_symbols   = false
+    require_uppercase = false
+    temporary_password_validity_days = 1
   }
 }
 
 resource "random_password" "user" {
   length = 32
+  special = false
 }
 
 resource "aws_cognito_user" "name" {
