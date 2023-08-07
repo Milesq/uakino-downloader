@@ -4,7 +4,7 @@ import bodyParser from 'body-parser'
 import serverless from 'serverless-http'
 import { object, string, number } from 'yup'
 
-import runEcsTask from './runTask.mjs'
+import runDownloaderTask from './runTask.mjs'
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -47,13 +47,13 @@ app.post('/', async (req, res, next) => {
 })
 
 app.post('/', async (req, res) => {
-  const { accessPassword } = req.data
+  const { accessPassword, ...downloaderParams } = req.data
 
   if (accessPassword !== process.env.ACCESS_PASSWORD) {
     return res.sendStatus(401)
   }
 
-  await runEcsTask(req.data)
+  await runDownloaderTask(downloaderParams)
   res.sendStatus(201)
 });
 
