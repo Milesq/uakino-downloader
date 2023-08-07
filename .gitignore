@@ -4,6 +4,7 @@
 *.tfstate.backup
 *.tfplan
 *.zip
+.terraform.tfstate.lock.info
 
 # Python
 __pycache__/
