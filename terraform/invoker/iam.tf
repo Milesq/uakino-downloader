@@ -27,3 +27,8 @@ resource "aws_iam_role_policy" "allow_ecs_run_task" {
   role   = aws_iam_role.lambda_role.name
   policy = data.aws_iam_policy_document.allow_ecs_run_task.json
 }
+
+resource "aws_iam_role_policy_attachment" "basic_role" {
+  role   = aws_iam_role.lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
