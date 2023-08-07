@@ -19,7 +19,7 @@ const bodySchema = object({
   url: string().required(),
   q: string().max(5).required(),
   'access-password': string().length(32).required(),
-});
+})
 
 app.post('/', async (req, res, next) => {
   try {
@@ -29,7 +29,7 @@ app.post('/', async (req, res, next) => {
       name,
       parts,
       url,
-    } = await bodySchema.validate(req.body, {abortEarly: true})
+    } = await bodySchema.validate(req.body, { abortEarly: true })
 
     req.data = {
       accessPassword,
@@ -37,7 +37,7 @@ app.post('/', async (req, res, next) => {
       name,
       parts,
       url,
-    };
+    }
 
     next()
   } catch (err) {
@@ -55,12 +55,12 @@ app.post('/', async (req, res) => {
 
   await runDownloaderTask(downloaderParams)
   res.sendStatus(201)
-});
+})
 
 if (process.env.NODE_ENV === 'production') {
-  exports.handler = serverless(app);
+  exports.handler = serverless(app)
 } else {
   app.listen(3000, () => {
-    console.log(`Server is listening`);
-  });
+    console.log(`Server is listening`)
+  })
 }
