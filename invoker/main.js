@@ -13,6 +13,7 @@ app.get('/', (req, res) => {
 
 const bodySchema = yup.object({
   url: yup.string().required(),
+  name: yup.string().required(),
   q: yup.string().max(5).required(),
   'access-password': yup.string().length(32).required()
 });
@@ -22,13 +23,15 @@ app.post('/', async (req, res, next) => {
     const {
       'access-password': accessPassword,
       q,
-      url
+      name,
+      url,
     } = await bodySchema.validate(req.body, {abortEarly: true, strict: true})
 
     req.data = {
       accessPassword,
       q,
-      url
+      name,
+      url,
     };
 
     next()
@@ -42,14 +45,15 @@ app.post('/', async (req, res) => {
   const {
     accessPassword,
     q,
-    url
+    name,
+    url,
   } = req.data
 
   if (accessPassword !== process.env.ACCESS_PASSWORD) {
     return res.sendStatus(401)
   }
 
-  // runEcsTask(url, q)
+  // runEcsTask(url, q, name)
   res.sendStatus(201)
 });
 
