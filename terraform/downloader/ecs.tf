@@ -26,9 +26,10 @@ resource "aws_ecs_task_definition" "my_task_definition" {
     logConfiguration = {
       logDriver = "awslogs"
       options = {
+        "awslogs-create-group": "true",
         "awslogs-group"         = "uakino"
         "awslogs-region"        = "eu-central-1"
-        "awslogs-stream-prefix" = "my-stream-prefix"
+        "awslogs-stream-prefix" = "uakino"
       }
     }
   }])
