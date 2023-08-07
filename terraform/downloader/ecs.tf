@@ -33,18 +33,3 @@ resource "aws_ecs_task_definition" "my_task_definition" {
     }
   }])
 }
-
-# resource "aws_ecs_service" "my_service" {
-#   name            = "my-ecs-service"
-#   cluster         = aws_ecs_cluster.aws_ecs_cluster.id
-#   task_definition = aws_ecs_task_definition.my_task_definition.arn
-#   desired_count   = 1
-
-#   network_configuration {
-#     subnets          = [aws_subnet.public_subnet.id]
-#     assign_public_ip = true
-#     security_groups  = [aws_security_group.allow_http.id]
-#   }
-
-#   # depends_on = [aws_iam_role_policy_attachment.ecs_task_execution_role_attachment]
-# }
