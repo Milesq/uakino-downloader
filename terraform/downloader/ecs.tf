@@ -16,6 +16,13 @@ resource "aws_ecs_task_definition" "my_task_definition" {
     name  = "main"
     image = aws_ecr_repository.container_repo.repository_url
 
+    environment = [
+      {
+        name  = "S3_OUTPUT"
+        value = aws_s3_bucket.main.id
+      }
+    ]
+
     logConfiguration = {
       logDriver = "awslogs"
       options = {
