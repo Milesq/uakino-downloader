@@ -57,10 +57,10 @@ app.post('/', async (req, res) => {
   res.sendStatus(201)
 })
 
-if (process.env.NODE_ENV === 'production') {
-  exports.handler = serverless(app)
-} else {
+if (process.env.NODE_ENV !== 'production') {
   app.listen(3000, () => {
     console.log(`Server is listening`)
   })
 }
+
+export const handler = serverless(app)
