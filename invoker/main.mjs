@@ -1,21 +1,24 @@
-const path = require('path')
-const express = require('express')
-const bodyParser = require('body-parser')
-const serverless = require('serverless-http')
-const yup = require('yup')
+import { resolve } from 'path'
+import express from 'express'
+import bodyParser from 'body-parser'
+import serverless from 'serverless-http'
+import { object, string, number } from 'yup'
+
+import runEcsTask from './runTask.mjs'
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'))
+  res.sendFile(resolve('index.html'))
 })
 
-const bodySchema = yup.object({
-  url: yup.string().required(),
-  name: yup.string().required(),
-  q: yup.string().max(5).required(),
-  'access-password': yup.string().length(32).required()
+const bodySchema = object({
+  name: string().required(),
+  parts: number().required(),
+  url: string().required(),
+  q: string().max(5).required(),
+  'access-password': string().length(32).required(),
 });
 
 app.post('/', async (req, res, next) => {
@@ -24,13 +27,15 @@ app.post('/', async (req, res, next) => {
       'access-password': accessPassword,
       q,
       name,
+      parts,
       url,
-    } = await bodySchema.validate(req.body, {abortEarly: true, strict: true})
+    } = await bodySchema.validate(req.body, {abortEarly: true})
 
     req.data = {
       accessPassword,
       q,
       name,
+      parts,
       url,
     };
 
@@ -42,18 +47,13 @@ app.post('/', async (req, res, next) => {
 })
 
 app.post('/', async (req, res) => {
-  const {
-    accessPassword,
-    q,
-    name,
-    url,
-  } = req.data
+  const { accessPassword } = req.data
 
   if (accessPassword !== process.env.ACCESS_PASSWORD) {
     return res.sendStatus(401)
   }
 
-  // runEcsTask(url, q, name)
+  await runEcsTask(req.data)
   res.sendStatus(201)
 });
 
