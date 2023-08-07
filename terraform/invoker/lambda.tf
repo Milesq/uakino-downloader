@@ -18,8 +18,8 @@ resource "aws_lambda_function" "invoker" {
   environment {
     variables = {
       "ACCESS_PASSWORD" = random_password.user.result
-      "NODE_PATH" = "/opt/node_modules"
-      "NODE_ENV" = "production"
+      "NODE_PATH"       = "/opt/node_modules"
+      "NODE_ENV"        = "production"
     }
   }
 
