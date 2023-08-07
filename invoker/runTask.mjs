@@ -6,17 +6,16 @@ export default async function runDownloaderTask(params) {
   const {
     taskDefinition: { revision: latestRevision },
   } = await ecs.describeTaskDefinition({
-    taskDefinition: 'uakino-downloader',
+    taskDefinition: process.env.TASK_DEF_NAME,
   })
 
-  return await ecs.runTask({
-    cluster: 'uakino-downloader-cluster',
-    taskDefinition: `uakino-downloader:${latestRevision}`,
+  return ecs.runTask({
+    cluster: process.env.CLUSTER_NAME,
+    taskDefinition: `${process.env.TASK_DEF_NAME}:${latestRevision}`,
     launchType: 'FARGATE',
     networkConfiguration: {
       awsvpcConfiguration: {
-        subnets: ['subnet-04de8313c5a7ebd9a'],
-        securityGroups: ['sg-00f25ef36be95bb47'],
+        subnets: [process.env.SUBNET],
         assignPublicIp: 'ENABLED',
       },
     },
@@ -27,7 +26,7 @@ export default async function runDownloaderTask(params) {
           environment: [
             {
               name: `UAKINO_PARAMS`,
-              value: btoa(JSON.stringify(params)),
+              value: Buffer.from(JSON.stringify(params)).toString('base64'),
             },
           ],
         },

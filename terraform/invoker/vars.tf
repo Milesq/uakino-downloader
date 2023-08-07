@@ -1,3 +1,3 @@
-variable "cluster_arn" {
-  type = string
+variable "downloader_params" {
+  type = map(any)
 }

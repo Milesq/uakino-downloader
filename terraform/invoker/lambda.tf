@@ -16,11 +16,12 @@ resource "aws_lambda_function" "invoker" {
   handler = "main.handler"
 
   environment {
-    variables = {
+    variables = merge({
+      "NODE_PATH" = "/opt/node_modules"
+      "NODE_ENV"  = "production"
+
       "ACCESS_PASSWORD" = random_password.user.result
-      "NODE_PATH"       = "/opt/node_modules"
-      "NODE_ENV"        = "production"
-    }
+    }, var.downloader_params)
   }
 
   layers = [aws_lambda_layer_version.node_modules.arn]

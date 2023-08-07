@@ -19,7 +19,7 @@ data "aws_iam_policy_document" "allow_ecs_run_task" {
   statement {
     actions   = ["ecs:RunTask"]
     effect    = "Allow"
-    resources = [var.cluster_arn]
+    resources = [var.downloader_params.CLUSTER_NAME]
   }
 }
 

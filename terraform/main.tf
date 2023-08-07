@@ -17,8 +17,8 @@ module "downloader" {
 }
 
 module "invoker" {
-  source      = "./invoker"
-  cluster_arn = module.downloader.ecs_cluster_arn
+  source     = "./invoker"
+  downloader_params = module.downloader.params
 }
 
 output "invoker_function_url" {
