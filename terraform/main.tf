@@ -27,6 +27,6 @@ output "invoker_function_url" {
 }
 
 output "invoker_password" {
-  value = module.invoker.invoker_password
+  value     = module.invoker.invoker_password
   sensitive = true
 }

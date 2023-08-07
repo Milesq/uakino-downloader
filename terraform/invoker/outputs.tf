@@ -3,6 +3,6 @@ output "function_url" {
 }
 
 output "invoker_password" {
-  value = random_password.user.result
+  value     = random_password.user.result
   sensitive = true
 }
