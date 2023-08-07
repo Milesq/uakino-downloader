@@ -1,35 +1,28 @@
-from sys import argv
-from os import mkdir, system
+from os import mkdir
 import requests
 
-from movies import movie
 from utils import percent
 
-try:
-    startfrom = int(argv[2])
-except:
-    startfrom = 1
+def download(movie):
+  q = movie.get('quality', '1080')
+  url_parts = movie['url']
+  url = lambda i: url_parts.format(name=movie['name'], q=q, i=i)
 
-default_url = 'https://nerklq.cyou/content/stream/films/{name}/hls/{q}/segment{i}.ts'
+  mkdir(movie['name'])
 
-# download the movie
-q = movie.get('quality', '1080')
-url_parts = movie.get('url', default_url)
-
-url = lambda i: url_parts.format(name=movie.get("filename"), q=q, i=i)
-
-try:
-    mkdir(movie['name'])
-except:
-    yn = input('Old files exists, are u sure u want proceed? (y/n)')
-    if yn != 'y':
-        exit()
-
-for i in range(startfrom, movie['parts'] + 1):
-    system('cls')
+  for i in range(1, movie['parts'] + 1):
     print(f'Downloading part {i} - {percent(i, movie["parts"])}%')
 
     with open(f'{movie["name"]}/{i}.ts', 'wb') as f:
-        r = requests.get(url(i), allow_redirects=True)
+      r = requests.get(url(i), allow_redirects=True)
 
-        f.write(r.content)
+      f.write(r.content)
+
+movie = {
+  'name': 'poczatok',
+  'parts': 150,
+  'url': 'https://s2.ashdi.vip/content/stream/films/pochatok_1219/hls/{q}/segment{i}.ts',
+  # 'quality': '1080'
+}
+
+download(movie)
