@@ -17,9 +17,9 @@ resource "aws_iam_role" "lambda_role" {
 
 data "aws_iam_policy_document" "allow_ecs_run_task" {
   statement {
-    actions   = ["ecs:RunTask"]
+    actions   = ["ecs:RunTask", "ecs:DescribeTaskDefinition", "iam:PassRole"]
     effect    = "Allow"
-    resources = [var.downloader_params.CLUSTER_NAME]
+    resources = ["*"]
   }
 }
 
