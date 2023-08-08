@@ -17,7 +17,7 @@ const bodySchema = object({
   name: string().required(),
   parts: number().required(),
   url: string().required(),
-  q: string().max(5).required(),
+  quality: string().max(5).required(),
   'access-password': string().length(32).required(),
 })
 
@@ -25,18 +25,12 @@ app.post('/', async (req, res, next) => {
   try {
     const {
       'access-password': accessPassword,
-      q,
-      name,
-      parts,
-      url,
+      ...data
     } = await bodySchema.validate(req.body, { abortEarly: true })
 
     req.data = {
       accessPassword,
-      q,
-      name,
-      parts,
-      url,
+      ...data
     }
 
     next()
