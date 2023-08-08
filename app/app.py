@@ -1,28 +1,20 @@
 import os
+import json
+from base64 import b64decode
 
 import boto3
 
 from get import download
 from merge import merge_files
 
-movie = {
-  'name': 'poczatok',
-  'parts': 150,
-  'url': 'https://s2.ashdi.vip/content/stream/films/pochatok_1219/hls/{q}/segment{i}.ts',
-  # 'quality': '1080'
-}
+movie = os.getenv('UAKINO_PARAMS')
+movie = b64decode(movie).decode('utf-8')
+movie = json.loads(movie)
 
-for k, v in os.environ.items():
-  print(f'{k}: {v}')
+download(movie)
+merge_files(movie)
 
-def main():
-  s3 = boto3.resource('s3')
-  download(movie)
-  merge_files(movie)
+filename = f'{movie["name"]}.ts'
 
-  filename = f'{movie["name"]}.ts'
-
-  s3.Bucket(os.getenv('S3_OUTPUT')).upload_file(filename, filename)
-
-# if __name__ == '__main__':
-#   main()
+s3 = boto3.resource('s3')
+s3.Bucket(os.getenv('S3_OUTPUT')).upload_file('movie.ts', filename)
