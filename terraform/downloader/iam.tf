@@ -26,6 +26,12 @@ data "aws_iam_policy_document" "allow_logs" {
     effect    = "Allow"
     resources = ["*"]
   }
+
+  statement {
+    actions   = ["ecr:*"]
+    effect    = "Allow"
+    resources = [aws_ecr_repository.container_repo.arn]
+  }
 }
 
 resource "aws_iam_role_policy" "allow_logs" {
@@ -33,6 +39,13 @@ resource "aws_iam_role_policy" "allow_logs" {
   policy = data.aws_iam_policy_document.allow_logs.json
 }
 
+
+# ████████╗ █████╗ ███████╗██╗  ██╗
+# ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#    ██║   ███████║███████╗█████╔╝
+#    ██║   ██╔══██║╚════██║██╔═██╗
+#    ██║   ██║  ██║███████║██║  ██╗
+#    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 
 resource "aws_iam_role" "ecs_task_role" {
   name = "ecs-task-role"
@@ -53,19 +66,13 @@ resource "aws_iam_role" "ecs_task_role" {
 
 data "aws_iam_policy_document" "allow_ecr" {
   statement {
-    actions   = ["ecr:*"]
+    actions   = ["s3:PutObject"]
     effect    = "Allow"
-    resources = [aws_ecr_repository.container_repo.arn]
-  }
-
-  statement {
-    actions   = ["s3:*"]
-    effect    = "Allow"
-    resources = [aws_s3_bucket.main.arn]
+    resources = ["${aws_s3_bucket.main.arn}/*"]
   }
 }
 
 resource "aws_iam_role_policy" "allow_ecr" {
-  role   = aws_iam_role.ecs_task_execution_role.name
+  role   = aws_iam_role.ecs_task_role.name
   policy = data.aws_iam_policy_document.allow_ecr.json
 }
