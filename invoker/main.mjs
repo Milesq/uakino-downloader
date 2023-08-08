@@ -53,8 +53,9 @@ app.post('/', async (req, res) => {
     return res.sendStatus(401)
   }
 
-  await runDownloaderTask(downloaderParams)
-  res.sendStatus(201)
+  const result = await runDownloaderTask(downloaderParams)
+
+  res.status(201).json(result.tasks[0].taskArn)
 })
 
 if (process.env.NODE_ENV !== 'production') {
