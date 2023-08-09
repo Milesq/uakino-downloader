@@ -9,7 +9,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "sa-east-1"
+  region = "ca-central-1"
 }
 
 module "downloader" {

@@ -4,7 +4,7 @@ resource "aws_ecr_repository" "container_repo" {
 
 provider "aws" {
   alias  = "eu"
-  region = "eu-central-1"
+  region = "eu-north-1"
 }
 
 resource "aws_s3_bucket" "main" {
