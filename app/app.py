@@ -11,6 +11,8 @@ movie = os.getenv('UAKINO_PARAMS')
 movie = b64decode(movie).decode('utf-8')
 movie = json.loads(movie)
 
+print(movie)
+
 download(movie)
 merge_files(movie)
 
